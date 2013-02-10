@@ -1,0 +1,43 @@
+#!/bin/bash
+# Encode media stream from glc into h.264 video
+# by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com
+
+while getopts "n" opt
+do  case $opt in
+    n)      NOSOUND='-na';;
+    [?])    echo "Usage: $0 [-n] [glc file] [stream number]";
+            exit 1;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+STREAM='${2}'
+GLCFILE='${1}'
+GLCNAME=`basename "${GLCFILE}"`
+
+#MPLAYER_OPTS='-nojoystick -demuxer y4m -vo yuv4mpeg:file=stream.yuv -vf eq2=1.2 -ao null -nosound -noframedrop -quiet'
+FFMPEG_VOPTS='-vcodec libx264 -same_quant -vprofile high -level 41 -preset ultrafast -vf mp=eq2=1.2'
+
+if [ -z "$STREAM" ]; then
+    echo "No stream number given, assuming stream is 1"
+    STREAM=1
+fi
+
+if [ -z "$NOSOUND" ]; then
+    echo "Extracting audio..."
+    glc-play "${GLCFILE}" -a $STREAM -o "${GLCNAME}.wav"
+    FFMPEG_AOPTS='-i "${GLCNAME}.wav" -c:a libvo_aacenc -b:a 128k -ac 2'
+    echo "Done"
+else
+    echo "Skipping Audio Extraction"
+fi
+
+echo "Creating named pipe and starting encoding..."
+echo "glc-player ${GLCFILE} -o - -y $STREAM |"
+echo "ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 ${GLCNAME}.mp4"
+glc-play "${GLCFILE}" -o - -y $STREAM | \
+ffmpeg -i - "$NOSOUND" $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 "${GLCNAME}.mp4"
+echo "Done"
+
+echo "Removing temporary files"
+rm -f "${GLCNAME}.wav"

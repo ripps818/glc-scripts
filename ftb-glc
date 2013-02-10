@@ -1,0 +1,9 @@
+#! /bin/bash
+# Capture Java OpenGL from Minecraft Feed the Beast modpacks
+# using GLC.
+# by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
+
+GAMEJAR="/home/ripps/bin/FTB_Launcher.jar"
+GLCARGS="-l glc.log -v 3 -i -z lzo --disable-audio -b back -o ftb_launcher.glc"
+
+glc-capture $GLCARGS java -jar "$GAMEJAR"

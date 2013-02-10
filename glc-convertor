@@ -1,0 +1,106 @@
+#! /bin/bash
+
+# Author Joseph Williams
+# Last Updated: 2011-10-19
+# Modified by Taylor "Ripps" LeMasurier-Wren
+
+# if you receive the error "File for preset 'XXXXX' not found"
+# then change the below VPRE vairable to your correct preset profile
+# these presets can normally be found in '/usr/local/share/ffmpeg'
+# and will read like "libx264-<<vpre_profile_name>>.ffpreset"
+# Common preset profiles are: 'lossless_slow','lossless_slower','slow','slower'
+
+VOPTS='-c:v libx264 -q:v 1 -vprofile high -level 41 -preset ultrafast'
+AOPTS='-c:a libvo_aacenc -b:a 128k -ac 2'
+
+return=1
+msg() {
+      echo ""
+      echo "OPTIONS"
+      echo "-------"
+      echo " -h OR --help       Displays this message"
+      echo " -ao                extract sound only into a wav file"
+      echo " -sp                extract video(mp4) and audio(wav) in to seperate files"
+      echo " -vo                extract video without sound into a mp4 file"
+      echo ""
+      echo " no options will output single mp4 file with both video and audio"
+      echo ""
+      echo " all output files will be in the same directory as the taregted glc file and with"
+      echo " the same filename e.g. fileone.glc will output to fileone.wav and fileone.mp4"
+      echo ""
+      echo "Example Command:"
+      echo "   glc-convertor -vo filename.glc"
+      echo "-------"
+      echo ""
+}
+
+if [ -z $2 ]
+  then
+    GLCFILE=$(echo "$1")
+    AUDIOFILE=$(echo "$1.wav")
+    RESULTFILE=$(echo "$1.mp4")
+else
+    GLCFILE=$(echo "$2")
+    AUDIOFILE=$(echo "$2.wav")
+    RESULTFILE=$(echo "$2.mp4")
+fi
+
+if [ $1 == '-vo' ]
+  then
+    glc-play $GLCFILE -o - -y 1 | ffmpeg -i - -an ${VOPTS} -threads 0 "$RESULTFILE"
+    if [ $? == 0 ]; then
+        return=0
+    fi
+elif [ $1 == '-ao' ]
+  then
+    echo "Audio Processing Started"
+    glc-play $GLCFILE -a 1 -o $AUDIOFILE
+    if [ $? == 0 ]; then
+        echo "Audio Processing Complete"
+    else
+        echo "Audio Processing Error"
+    fi
+elif [ $1 == '-sp' ]
+  then
+    echo "Audio Processing Started"
+    glc-play $GLCFILE -a 1 -o $AUDIOFILE
+    if [ $? = 0 ]; then
+        echo "Audio Processing Complete"
+    else
+        echo "Audio Processing Error"
+    fi
+    glc-play $GLCFILE -o - -y 1 | ffmpeg -i - -an ${VOPTS} -threads 0 "$RESULTFILE"
+    if [ $? == 0 ]; then
+        return=0
+    fi
+elif [ $1 == '--help' ]
+  then
+    return=0
+    msg
+elif [ $1 == '-h' ]
+  then
+    return=0
+    msg
+else
+    # Extract audio
+    echo "Audio Processing Started"
+    glc-play $GLCFILE -a 1 -o $AUDIOFILE
+    if [ $? = 0 ]; then
+        echo "Audio Processing Complete"
+    else
+        echo "Audio Processing Error"
+    fi
+    glc-play $GLCFILE -o - -y 1 | ffmpeg -i - -i $AUDIOFILE ${AOPTS} ${VOPTS} -threads 0 "$RESULTFILE"
+    if [ $? == 0 ]; then
+        return=0
+    fi
+fi
+
+if [ $return == 0 ]
+  then
+    echo ""
+    exit
+else
+    echo "Error"
+    msg
+fi
