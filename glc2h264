@@ -25,7 +25,7 @@ fi
 
 if [ -z "$NOSOUND" ]; then
     echo "Extracting audio..."
-    glc-play "${GLCFILE}" -a $STREAM -o "${GLCNAME}.wav"
+    glc-play "$GLCFILE" -a $STREAM -o "${GLCNAME}.wav"
     FFMPEG_AOPTS='-i "${GLCNAME}.wav" -c:a libvo_aacenc -b:a 128k -ac 2'
     echo "Done"
 else
@@ -33,10 +33,10 @@ else
 fi
 
 echo "Creating named pipe and starting encoding..."
-echo "glc-player ${GLCFILE} -o - -y $STREAM |"
+echo "glc-player $GLCFILE -o - -y $STREAM |"
 echo "ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 ${GLCNAME}.mp4"
-glc-play "${GLCFILE}" -o - -y $STREAM | \
-ffmpeg -i - "$NOSOUND" $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 "${GLCNAME}.mp4"
+glc-play "$GLCFILE" -o - -y $STREAM | \
+ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 "${GLCNAME}.mp4"
 echo "Done"
 
 echo "Removing temporary files"
