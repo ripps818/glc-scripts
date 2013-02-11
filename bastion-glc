@@ -1,0 +1,10 @@
+#! /bin/bash
+# Screen capture Bastion gameplay using GLC
+# by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
+
+GAMEEXE="/opt/bastion/Bastion/Bastion.bin.x86_6"
+GLCARGS="-l bastion-glc.log -v 3 -i -z lzo --disable-audio -b back -o bastion.glc"
+
+export LD_LIBRARY_PATH=/opt/bastion/Bastion/lib64:/opt/bastion/Bastion
+
+glc-capture $GLCARGS "$GAMEEXE"

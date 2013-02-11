@@ -16,7 +16,8 @@ export __GL_THREADED_OPTIMIZATIONS=1
 DIR=$(echo $PWD)
 
 cd "$GAMEROOT"
-record-monitor "${DIR}}"/tf2-pa.wav &
-/usr/bin/glc-capture32 -l "${DIR}"/glc.log -v 3 -i -b back -z lzo -o "${DIR}"/tf2.glc "${GAMEROOT}"/${GAMEEXE} -game tf_beta -steam -novid
-kill $!
+#record-monitor "${DIR}}"/tf2-pa.wav &
+/usr/bin/glc-capture32 -l "${DIR}"/tf2beta-glc.log -v 3 -i -b back -z lzo -o "${DIR}"/tf2.glc \
+    "${GAMEROOT}"/${GAMEEXE} -game tf_beta -steam -novid
+#kill $!
 

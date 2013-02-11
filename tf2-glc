@@ -19,6 +19,7 @@ DIR=$(echo $PWD)
 cd "$GAMEROOT"
 #record-monitor "${DIR}}"/tf2-pa.wav &
 chmod +x "${GAMEROOT}"/${GAMEEXE}
-/usr/bin/glc-capture32 -l "${DIR}"/glc.log -v 3 -i -b back -z lzo -o "${DIR}"/tf2.glc "${GAMEROOT}"/${GAMEEXE} -game tf -steam -novid
-kill $!
+/usr/bin/glc-capture32 -l "${DIR}"/tf2-glc.log -v 3 -i -b back -z lzo -o "${DIR}"/tf2.glc \
+    "${GAMEROOT}"/${GAMEEXE} -game tf -steam -novid
+#kill $!
 
