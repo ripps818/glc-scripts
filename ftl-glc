@@ -1,0 +1,28 @@
+#! /bin/bash
+# Capture steam FTL - Faster than Light
+# using GLC.
+# by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
+DIR="$(pwd)"
+
+GAMEDIR='/home/ripps/Steam/SteamApps/common/FTL Faster Than Light/data'
+GLCARGS="-l $DIR/ftl-glc.log -v 3 -i --disable-audio -b back -o $DIR/ftl.glc"
+
+# select CPU architecture (modified from FTL launch script)
+cd "$GAMEDIR"
+command="FTL"
+machine="$(uname -m)"
+if [ -e "amd64/bin/$command" ] \
+   && ( [ "$machine" = 'x86_64' ] || [ "$machine" = 'amd64' ] )
+        then arch='amd64'
+        else arch='x86'
+fi
+echo Loading Arch = $arch
+
+export LD_LIBRARY_PATH="$GAMEDIR/$arch/lib:$LD_LIBRARY_PATH"
+export SDL_VIDEO_FULLSCREEN_DISPLAY=0 #Fix bad fullscreen on nvidia twinview
+
+GAMEEXE="$arch/bin/$command"
+
+# Start game using glc-capture
+echo "glc-capture $GLCARGS $GAMEEXE $@"
+glc-capture $GLCARGS "$GAMEEXE" "$@"

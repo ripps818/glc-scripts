@@ -1,5 +1,5 @@
 #!/bin/bash
-# Encode media stream from glc into h.264 video
+# Encode media stream from glc into mpeg2 transport stream video
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com
 
 while getopts "n" opt
@@ -11,12 +11,12 @@ do  case $opt in
 done
 shift $(($OPTIND - 1))
 
-STREAM=$2
-GLCFILE=$1
-GLCNAME=`basename "$GLCFILE"`
+STREAM=${2}
+GLCFILE=${1}
+GLCNAME=`basename "${GLCFILE}"`
 
 #MPLAYER_OPTS='-nojoystick -demuxer y4m -vo yuv4mpeg:file=stream.yuv -vf eq2=1.2 -ao null -nosound -noframedrop -quiet'
-FFMPEG_VOPTS='-vcodec libx264 -same_quant -vprofile high -level 41 -preset ultrafast -vf mp=eq2=1.2 -r 30 -threads 2 -f mp4'
+FFMPEG_VOPTS='-vcodec mpeg2video -same_quant -vf mp=eq2=1.2 -threads 2 -f mpegts'
 
 if [ -z "$STREAM" ]; then
     echo "No stream number given, assuming stream is 1"
@@ -27,7 +27,7 @@ if [ -z "$NOSOUND" ]; then
     echo "Extracting audio..."
     echo "glc-play $GLCFILE -a $STREAM -o ${GLCNAME}.wav"
     glc-play "$GLCFILE" -a $STREAM -o "${GLCNAME}.wav"
-    FFMPEG_AOPTS="-i $GLCNAME.wav -c:a libvo_aacenc -b:a 128k -ac 2"
+    FFMPEG_AOPTS="-i ${GLCNAME}.wav -c:a copy"
     echo "Done"
 else
     echo "Skipping Audio Extraction"
@@ -35,9 +35,9 @@ fi
 
 echo "Creating named pipe and starting encoding..."
 echo "glc-player $GLCFILE -o - -y $STREAM |"
-echo "ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS -threads 0 -f mp4 $GLCNAME.mp4"
+echo "ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS ${GLCNAME}.m2ts"
 glc-play "$GLCFILE" -o - -y $STREAM | \
-ffmpeg -i - $NOSOUND $FFMPEG_AOPTS $FFMPEG_VOPTS "$GLCNAME.mp4"
+ffmpeg -i - $NOSOUND $FFMPEG_VOPTS $FFMPEG_AOPTS "${GLCNAME}.m2ts"
 echo "Done"
 
 if [ -f "${GLCNAME}.wav" ]; then
