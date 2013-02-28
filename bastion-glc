@@ -2,9 +2,18 @@
 # Screen capture Bastion gameplay using GLC
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 
-GAMEEXE="/opt/bastion/Bastion/Bastion.bin.x86_6"
-GLCARGS="-l bastion-glc.log -v 3 -i -z lzo --disable-audio -b back -o bastion.glc"
+GAMEDIR="/home/ripps/Steam/SteamApps/common/Bastion/Linux"
+GAMEEXE="$GAMEDIR/Bastion.bin.x86"
+GLCARGS="-l bastion-glc.log -v 3 -i --disable-audio -s -b back -o bastion.glc --uncompressed=50 --compressed=100"
 
-export LD_LIBRARY_PATH=/opt/bastion/Bastion/lib64:/opt/bastion/Bastion
+export LD_LIBRARY_PATH=$GAMEDIR:$GAMEDIR/lib:$LD_LIBRARY_PATH
 
-glc-capture $GLCARGS "$GAMEEXE"
+# Record audio
+record-monitor bastion.monitor.wav &
+record-voice bastion.voice.wav &
+
+# Start game
+echo "glc-capture $GLCARGS $GAMEEXE $@"
+glc-capture $GLCARGS $GAMEEXE $@
+
+killall parec

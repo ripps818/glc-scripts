@@ -2,23 +2,28 @@
 # use 32-bit version of glc to capture Team Fortess 2 beta for Linux
 # Steam client must be running.
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
-DIR=$(echo $PWD)
+DIR="$(pwd)"
 
+GLCARGS="-l $DIR/tf2-glc.log -v 3 -i --disable-audio -b back -s -o $DIR/tf2.glc --uncompressed=50 --compressed=100"
 GAMEROOT="/home/ripps/Steam/SteamApps/ripps818/Team Fortress 2"
 STEAMPATH="/home/ripps/Steam/ubuntu12_32"
 GAMEEXE=hl2_linux
-cd "$GAMEROOT"
 
+export LD_LIBRARY_PATH=bin:$STEAMPATH:/usr/lib32:$LD_LIBRARY_PATH
 export SteamAppId=440
-export LD_LIBRARY_PATH=bin:"${STEAMPATH}":/usr/lib32:$LD_LIBRARY_PATH
-#export LD_PRELOAD=$(dirname ${STEAMPATH})/gameoverlayrenderer.so
 
 # Enable Nvidia Optimizations
 export __GL_THREADED_OPTIMIZATIONS=1
 
-echo "${GAMEROOT}/${GAMEEXE}"
-#record-monitor "${DIR}}"/tf2-pa.wav &
-chmod +x ${GAMEEXE}
-/usr/bin/glc-capture32 -l "${DIR}"/tf2-glc.log -v 3 -i --disable-audio -b back -z lzo -o "${DIR}"/tf2.glc ${GAMEEXE} -game tf -steam -novid
-#kill $!
+cd $GAMEROOT
+
+# Record audio
+record-monitor $DIR/tf2.monitor.wav &
+record-voice $DIR/tf2.voice.wav &
+
+# Start game"
+chmod +x "$GAMEEXE
+echo "glc-capture32 $GLCARGS $GAMEEXE -game tf -steam -novid"
+glc-capture32 $GLCARGS "$GAMEEXE" -game tf -steam -novid
+killall parec
 

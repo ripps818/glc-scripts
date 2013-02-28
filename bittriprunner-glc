@@ -5,11 +5,13 @@ DIR="$(pwd)"
 cd /opt/bittriprunner
 
 GLCARGS="-l $DIR/bittriprunner-glc.log -v 3 -f 60 --uncompressed=50 --compressed=100 -s --disable-audio -o $DIR/bittriprunner.glc"
-GAMEEXE='/opt/bittriprunner/bit.trip.runner'
+GAMEEXE="/opt/bittriprunner/bit.trip.runner"
 
-# Start game using glc-capture
+# Record audio
 record-monitor "$DIR/bittriprunner.monitor.wav" &
 record-microphone "$DIR/bittriprunner.voice.wav" &
+
+# STar game
 echo "glc-capture $GLCARGS $GAMEEXE $@"
 glc-capture $GLCARGS "$GAMEEXE" "$@"
 killall parec

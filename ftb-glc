@@ -4,6 +4,14 @@
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 
 GAMEJAR="/home/ripps/bin/FTB_Launcher.jar"
-GLCARGS="-l ftb-glc.log -v 3 -i -z lzo --disable-audio -b back -o ftb_launcher.glc"
+GLCARGS="-l ftb-glc.log -v 3 -i -z lzo --disable-audio -b back -o ftb.glc --uncompressed=50 --compressed=100"
 
-glc-capture $GLCARGS java -jar "$GAMEJAR"
+# Record audio
+record-monitor ftb.monitor.wav &
+record-microphone ftb.voice.wav &
+
+# Start game
+echo "glc-capture $GLCARGS java -jar $GAMEJAR"
+glc-capture $GLCARGS java -jar $GAMEJAR
+
+killall parec
