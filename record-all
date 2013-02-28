@@ -1,0 +1,3 @@
+#! /bin/bash
+record-monitor monitor.wav &
+record-microphone voice.wav
