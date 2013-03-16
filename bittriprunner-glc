@@ -4,7 +4,7 @@
 DIR="$(pwd)"
 cd /opt/bittriprunner
 
-GLCARGS="-l $DIR/bittriprunner-glc.log -v 3 -f 60 --uncompressed=50 --compressed=100 -s --disable-audio -o $DIR/bittriprunner.glc"
+GLCARGS="-l $DIR/bittriprunner-glc.log -v 3 -f 60 --uncompressed=100 --unscaled=100 --compressed=200 -s --disable-audio -o $DIR/bittriprunner.glc"
 GAMEEXE="/opt/bittriprunner/bit.trip.runner"
 
 # Record audio

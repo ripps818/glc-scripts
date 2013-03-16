@@ -4,7 +4,7 @@
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 
 GAMEJAR="/home/ripps/bin/FTB_Launcher.jar"
-GLCARGS="-l ftb-glc.log -v 3 -i -z lzo --disable-audio -b back -o ftb.glc --uncompressed=50 --compressed=100"
+GLCARGS="-l ftb-glc.log -v 3 -i --disable-audio -b back -o ftb.glc --uncompressed=100 --unscaled 100 --compressed=200"
 
 # Record audio
 record-monitor ftb.monitor.wav &
