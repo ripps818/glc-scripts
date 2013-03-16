@@ -3,15 +3,18 @@
 # using GLC.
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 
-GAMEJAR="/home/ripps/bin/FTB_Launcher.jar"
-GLCARGS="-l ftb-glc.log -v 3 -i --disable-audio -b back -o ftb.glc --uncompressed=100 --unscaled 100 --compressed=200"
+GAMEJAR="/usr/share/feedthebeast/feedthebeast.jar"
+GLCARGS="-l ftb-glc.log -v 3 -i -p -b back -o ftb.glc --uncompressed=100 --unscaled 100 --compressed=200"
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$JAVA_HOME/lib/amd64/:$JAVA_HOME/lib/i386/:$JAVA_HOME/jre/lib/amd64/:$JAVA_HOME/jre/lib/i386/"
 
 # Record audio
-record-monitor ftb.monitor.wav &
 record-microphone ftb.voice.wav &
 
+# fix for users of special IM modules
+unset XMODIFIERS GTK_IM_MODULE QT_IM_MODULE
+
 # Start game
-echo "glc-capture $GLCARGS java -jar $GAMEJAR"
-glc-capture $GLCARGS java -jar $GAMEJAR
+echo "glc-capture $GLCARGS java -jar $GAMEJAR $@"
+glc-capture $GLCARGS java -Xmx1024M -Xms512M -jar $GAMEJAR "$@"
 
 killall parec

@@ -4,11 +4,10 @@
 DIR="$(pwd)"
 cd /opt/bittriprunner
 
-GLCARGS="-l $DIR/bittriprunner-glc.log -v 3 -f 60 --uncompressed=100 --unscaled=100 --compressed=200 -s --disable-audio -o $DIR/bittriprunner.glc"
-GAMEEXE="/opt/bittriprunner/bit.trip.runner"
+GLCARGS="-l $DIR/bittriprunner-glc.log -v 3 -f 60 --uncompressed=100 --unscaled=100 --compressed=200 -s -p -o $DIR/bittriprunner.glc"
+GAMEEXE="/opt/bit.trip.runner/bit.trip.runner"
 
 # Record audio
-record-monitor "$DIR/bittriprunner.monitor.wav" &
 record-microphone "$DIR/bittriprunner.voice.wav" &
 
 # STar game

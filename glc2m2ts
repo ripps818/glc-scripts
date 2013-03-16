@@ -16,7 +16,7 @@ GLCFILE=${1}
 GLCNAME=`basename "${GLCFILE}"`
 
 #MPLAYER_OPTS='-nojoystick -demuxer y4m -vo yuv4mpeg:file=stream.yuv -vf eq2=1.2 -ao null -nosound -noframedrop -quiet'
-FFMPEG_VOPTS='-vcodec mpeg2video -same_quant -vf mp=eq2=1.2 -threads 2 -f mpegts'
+FFMPEG_VOPTS='-vcodec mpeg2video -q:v 0 -vf lutyuv=y=val*1.2 -threads 2 -f mpegts'
 
 if [ -z "$STREAM" ]; then
     echo "No stream number given, assuming stream is 1"

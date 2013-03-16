@@ -4,9 +4,9 @@
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 DIR="$(pwd)"
 
-GLCARGS="-l $DIR/tf2-glc.log -v 3 -i --disable-audio -b back -s -o $DIR/tf2.glc --uncompressed=50 --compressed=100"
-GAMEROOT="/home/ripps/Steam/SteamApps/ripps818/Team Fortress 2"
-STEAMPATH="/home/ripps/Steam/ubuntu12_32"
+GLCARGS="-l $DIR/tf2-glc.log -v 3 -i -p -b back -s -o $DIR/tf2.glc --uncompressed=100 --unscaled 100 --compressed=200"
+GAMEROOT="/home/ripps-arch/Steam/SteamApps/ripps818/Team Fortress 2"
+STEAMPATH="/home/ripps-arch/Steam/ubuntu12_32"
 GAMEEXE=hl2_linux
 
 export LD_LIBRARY_PATH=bin:$STEAMPATH:/usr/lib32:$LD_LIBRARY_PATH
@@ -18,12 +18,11 @@ export __GL_THREADED_OPTIMIZATIONS=1
 cd $GAMEROOT
 
 # Record audio
-record-monitor $DIR/tf2.monitor.wav &
 record-voice $DIR/tf2.voice.wav &
 
 # Start game"
 chmod +x "$GAMEEXE
-echo "glc-capture32 $GLCARGS $GAMEEXE -game tf -steam -novid"
-glc-capture32 $GLCARGS "$GAMEEXE" -game tf -steam -novid
+echo "glc-capture $GLCARGS $GAMEEXE -game tf -steam -novid"
+glc-capture $GLCARGS "$GAMEEXE" -game tf -steam -novid
 killall parec
 

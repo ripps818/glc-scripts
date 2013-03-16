@@ -3,7 +3,7 @@
 # Steam client must be running.
 # by Taylor "Ripps" LeMasurier-Wren <ripps818@gmail.com>
 
-GAMEROOT="/home/ripps/Steam/SteamApps/ripps818/Team Fortress 2 Beta"
+GAMEROOT="/home/ripps-arch/Steam/SteamApps/ripps818/Team Fortress 2 Beta"
 GAMEEXE=hl2_linux
 STEAMPATH=$(readlink ~/.steampath)
 
@@ -16,8 +16,7 @@ export __GL_THREADED_OPTIMIZATIONS=1
 DIR=$(echo $PWD)
 
 cd "$GAMEROOT"
-#record-monitor "${DIR}}"/tf2-pa.wav &
-/usr/bin/glc-capture32 -l "${DIR}"/tf2beta-glc.log -v 3 -i -b back -z lzo -o "${DIR}"/tf2.glc \
+/usr/bin/glc-capture -l "${DIR}"/tf2beta-glc.log -v 3 -i -b back -z lzo -p -o "${DIR}"/tf2.glc \
     "${GAMEROOT}"/${GAMEEXE} -game tf_beta -steam -novid
 #kill $!
 
