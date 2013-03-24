@@ -1,4 +1,4 @@
 #!/bin/bash
 # Basic wrapper for glc to make sure my usual settings are applied
 
-glc-capture -l glc.log -v 3 -i -j -z lzo --disable-audio -b back "${@}"
+glc-capture -l glc.log -v 3 -i -p -b back "${@}"
