@@ -10,7 +10,8 @@
 # and will read like "libx264-<<vpre_profile_name>>.ffpreset"
 # Common preset profiles are: 'lossless_slow','lossless_slower','slow','slower'
 
-VOPTS='-c:v libx264 -q:v 0 -vprofile high -level 41 -preset ultrafast -vf mp=eq2=1.2'
+#VOPTS='-c:v libx264 -q:v 0 -vprofile high -level 41 -preset ultrafast -vf mp=eq2=1.2'
+VOPTS='-c:v libx264 -crf 18 -preset ultrafast'
 AOPTS='-c:a flac -ac 2'
 
 return=1
